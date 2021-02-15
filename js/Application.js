@@ -6,6 +6,8 @@ class Application {
                 height: 500,
                 background: '#d2d2d2',
             });
+            // создаем экземпляр класса Mouse
+            this.mouse = new Mouse(this.canvas.el);
 
             this.pTimestamp = 0;
             // в э  том массиве будут храниться элементы, которые мы хотим отрисовывать

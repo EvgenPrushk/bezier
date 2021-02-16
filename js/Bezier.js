@@ -17,22 +17,22 @@ class Bezier {
                 x: 0,
                 y: 0,
             };
-            
-           // пробегаемся по всем точкам  
-           for (let k = 0; k <= n; k++) {
-                // коэффицент
-               const b = C(n, k) * t ** k * (1 - t) ** (n - k)
-               // порядковый номер точки
-               const node = nodes[k];
 
-               point.x += node.x * b;
-               point.y += node.y * b;
-              
-               
-           }
+            // пробегаемся по всем точкам  
+            for (let k = 0; k <= n; k++) {
+                // коэффицент
+                const b = C(n, k) * t ** k * (1 - t) ** (n - k)
+                // порядковый номер точки
+                const node = nodes[k];
+
+                point.x += node.x * b;
+                point.y += node.y * b;
+
+
+            }
             // добавляем эту точку в результирующий массив
-           result.push(point);
-           //проверка для выхода
+            result.push(point);
+            //проверка для выхода
             if (t === 1) {
                 break;
             }
@@ -51,16 +51,16 @@ class Bezier {
         }
     }
 
-    draw (canvas) {
-        for (const node  of this.nodes) {
+    draw(canvas) {
+        for (const node of this.nodes) {
             canvas.drawCircle({
                 x: node.x,
                 y: node.y,
-                r: 5,                
+                r: 5,
                 fillStyle: "red",
             });
         }
-// -1 вычитаем, чтобы не взять пару для последней точки. и строим лини между точками
+        // -1 вычитаем, чтобы не взять пару для последней точки. и строим лини между точками
         for (let i = 0; i < this.nodes.length - 1; i++) {
             canvas.drawLine({
                 x1: this.nodes[i].x,
@@ -69,9 +69,9 @@ class Bezier {
                 y2: this.nodes[i + 1].y,
                 strokeStyle: 'red',
                 lineWidth: 1.4,
-                
+
             });
-            
+
         }
         const curve = Bezier.getCurve(this.nodes, this.step);
 
@@ -83,10 +83,21 @@ class Bezier {
                 y2: curve[i + 1].y,
                 strokeStyle: 'black',
                 lineWidth: 1,
-                
-            });
-         }
-        }
-   
-}
 
+            });
+        }
+    }
+
+    // возвращаем  точку(узел) по ее координате
+    getPointUnder (x, y) {
+        for (const node of this.nodes) {
+            // получаем растояние 
+            const dist = getDist(x, y, node.x, node.y);
+            if (node.x === x && node.y === y) {
+                return node;
+            }
+        }
+
+
+    }
+}

@@ -19,6 +19,6 @@ app.container.push(
     ],
 }));
 
-app.tickHandlers.push((fps) => {
-    
+app.tickHandlers.push(({ fps }) => {
+    console.log(app.mouse.x, app.mouse.y, app.mouse.over);
 })

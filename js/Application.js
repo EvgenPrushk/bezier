@@ -20,9 +20,14 @@ class Application {
 // timestamp - время жизни страницы
     tick (timestamp) {
         requestAnimationFrame((x) => this.tick(x));
+
+        
+
         const diff = timestamp - this.pTimestamp;
         const secondPart = 1000 / diff;
         const fps = 1000 / diff;
+       
+        
         this.pTimestamp = timestamp;
     
         //  проходимся по всем функциям и вызываем их 
@@ -31,7 +36,7 @@ class Application {
                 timestamp,
                 diff,
                 secondPart,
-                fps,
+                fps,               
             });
         }
         this.canvas.clear();
@@ -39,5 +44,7 @@ class Application {
         for (const item of this.container) {
             item.draw(this.canvas);
         }
+
+        this.mouse.tick();
     }
 }

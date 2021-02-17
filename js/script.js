@@ -23,7 +23,16 @@ app.container.push(bezier);
 
 app.tickHandlers.push(({ fps }) => {
     if (app.mouse.over && app.mouse.click) {
-        pointUnderMouse = bezier.getPointUnder(app.mouse.x, app.mouse.y);
+        pointUnderMouse = bezier.getPointUnder(
+            app.mouse.x - app.camera.offsetX,
+            app.mouse.y - app.camera.offsetY
+        );
+        
+    }
+    // если мы точку не нашли
+    if (!pointUnderMouse && app.mouse.left) {
+      app.camera.offsetX += app.mouse.dx;    
+      app.camera.offsetY += app.mouse.dy;    
     }
     // если мышка не над canvas или мы отпустили клавишу 
     if (!app.mouse.left) {
@@ -31,7 +40,7 @@ app.tickHandlers.push(({ fps }) => {
     }
     // если есть такая точка 
     if (pointUnderMouse && app.mouse.over) {
-        pointUnderMouse.x = app.mouse.x;
-        pointUnderMouse.y = app.mouse.y;
+        pointUnderMouse.x = app.mouse.x - app.camera.offsetX;
+        pointUnderMouse.y = app.mouse.y - app.camera.offsetY;
     }
 })

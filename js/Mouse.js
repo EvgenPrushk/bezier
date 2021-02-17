@@ -3,6 +3,13 @@ class Mouse {
         // координат
         this.x = 0,
         this.y = 0;
+        // координаты x and y перед тиком
+        this.pX = 0;
+        this.pY = 0;
+        // говорят о том на сколько между тиками была смещена мышка
+        this.dx = 0;
+        this.dy = 0;
+
         // нажатие кнопок мыши
         this.left = false;
         this.pLeft = false;
@@ -22,6 +29,12 @@ class Mouse {
     tick () { 
         this.click = !this.pLeft && this.left;
         this.pLeft = this.left;
+
+        this.dx = this.x - this.pX;
+        this.dy = this.y - this.pY;
+
+        this.pX = this.x;
+        this.pY = this.y;
     }
 
     mouseenterHadler (event) {

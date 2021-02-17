@@ -8,20 +8,23 @@ class Application {
             });
             // создаем экземпляр класса Mouse
             this.mouse = new Mouse(this.canvas.el);
+            // сборщик информации о том маштабе и сдвеге в canvas
+            this.camera = new Camera();
 
             this.pTimestamp = 0;
             // в э  том массиве будут храниться элементы, которые мы хотим отрисовывать
             this.container = [];
             this.tickHandlers = [];
+            //изменяем размер экрана 
+            this.resize();
+            window.addEventListener('resize', () => this.resize());
             // регистрирует вызов функции
             requestAnimationFrame((x) => this.tick(x));
     }
     // метод, который обнавляет наш экран( очистка, проход по всему контейнеру и отрисовка)
 // timestamp - время жизни страницы
     tick (timestamp) {
-        requestAnimationFrame((x) => this.tick(x));
-
-        
+        requestAnimationFrame((x) => this.tick(x));        
 
         const diff = timestamp - this.pTimestamp;
         const secondPart = 1000 / diff;
@@ -39,12 +42,26 @@ class Application {
                 fps,               
             });
         }
+
         this.canvas.clear();
+
+        this.canvas.save();
+        this.canvas.translate(
+            this.camera.offsetX,
+            this.camera.offsetY,
+        );
         
         for (const item of this.container) {
             item.draw(this.canvas);
         }
 
+       this.canvas.restore();
+
         this.mouse.tick();
+    }
+    // изменяет рамзмер canvas. запрашиваем у el canvas
+    resize () {
+        this.canvas.el.width = window.innerWidth;
+        this.canvas.el.height = window.innerHeight;
     }
 }

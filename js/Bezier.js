@@ -93,7 +93,7 @@ class Bezier {
         for (const node of this.nodes) {
             // получаем растояние 
             const dist = getDist(x, y, node.x, node.y);
-            if (node.x === x && node.y === y) {
+            if (dist <= 5) {
                 return node;
             }
         }

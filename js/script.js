@@ -43,4 +43,6 @@ app.tickHandlers.push(({ fps }) => {
         pointUnderMouse.x = app.mouse.x - app.camera.offsetX;
         pointUnderMouse.y = app.mouse.y - app.camera.offsetY;
     }
+
+   
 })

@@ -24,7 +24,11 @@ class Application {
     // метод, который обнавляет наш экран( очистка, проход по всему контейнеру и отрисовка)
 // timestamp - время жизни страницы
     tick (timestamp) {
-        requestAnimationFrame((x) => this.tick(x));        
+        requestAnimationFrame((x) => this.tick(x));   
+        // если у нас было смещение мыши
+        if (this.mouse.delta) {
+            this.camera.scale += this.camera.scale * this.camera.scaleStep;
+        }     
 
         const diff = timestamp - this.pTimestamp;
         const secondPart = 1000 / diff;
@@ -50,6 +54,7 @@ class Application {
             this.camera.offsetX,
             this.camera.offsetY,
         );
+        this.canvas.scale(x, y);
         
         for (const item of this.container) {
             item.draw(this.canvas);

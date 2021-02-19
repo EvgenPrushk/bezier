@@ -9,6 +9,10 @@ class Mouse {
         // говорят о том на сколько между тиками была смещена мышка
         this.dx = 0;
         this.dy = 0;
+        //
+        this.delta = 0;
+        this.pDelta = 0;
+        this.cDelta = 0;
 
         // нажатие кнопок мыши
         this.left = false;
@@ -24,6 +28,7 @@ class Mouse {
 
        this.el.addEventListener("mousedown", (e) => this.mousedownHadler(e));
        this.el.addEventListener("mouseup", (e) => this.mouseupHadler(e));
+       this.el.addEventListener("wheel", (e) => this.wheelHadler(e));
     }
 
     tick () { 
@@ -35,6 +40,9 @@ class Mouse {
 
         this.pX = this.x;
         this.pY = this.y;
+        // вычисляем разницу во время тика
+        this.delta = this.cDelta - this.pDelta;
+        this.pDelta = this.cDelta;
     }
 
     mouseenterHadler (event) {
@@ -64,5 +72,9 @@ class Mouse {
         if (event.button === 0) {
             this.left = false;
         }       
+    }
+
+    wheelHadler (event) {
+        this.cDelta += event.deltaY / 53;
     }
 }

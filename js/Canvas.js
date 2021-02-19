@@ -69,4 +69,8 @@ class Canvas {
     translate(x, y) {
         this.context.translate(x, y);
     }
+
+    scale (s) {
+        this.context.scale(s, s);
+    }
 }

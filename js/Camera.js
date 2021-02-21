@@ -3,8 +3,8 @@ class Camera {
         this.offsetX = 0;
         this.offsetY = 0;
 
-        this.scale = 0;
+        this.scale = 1;
         //маштаб маштаба
-        this.scaleStep = 0.01;
+        this.scaleStep = - 0.1;
     }
 }

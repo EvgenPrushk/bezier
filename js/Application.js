@@ -27,7 +27,15 @@ class Application {
         requestAnimationFrame((x) => this.tick(x));   
         // если у нас было смещение мыши
         if (this.mouse.delta) {
-            this.camera.scale += this.camera.scale * this.camera.scaleStep;
+            // делаем так, что точко под мышкой сохранилась относительно обсолютного нуля
+            const offsetX = this.camera.offsetX;
+            const offsetY = this.camera.offsetY;
+
+            this.camera.scale += this.mouse.delta * this.camera.scaleStep;
+
+            this.camera.offsetX -= offsetX * this.camera.scale;
+            this.camera.offsetY -= offsetY * this.camera.scale;
+            
         }     
 
         const diff = timestamp - this.pTimestamp;
@@ -54,7 +62,8 @@ class Application {
             this.camera.offsetX,
             this.camera.offsetY,
         );
-        this.canvas.scale(x, y);
+
+        this.canvas.scale(this.camera.scale);
         
         for (const item of this.container) {
             item.draw(this.canvas);

@@ -81,6 +81,7 @@ class Bezier {
                 });    
             }            
         }
+        
         const curve = Bezier.getCurve(this.nodes, this.step);
         const curveLength = getcurveLength(curve);
         const { context } = canvas;
@@ -95,22 +96,8 @@ class Bezier {
         context.lineWidth = 2;
         context.setLineDash([curveLength * this.part, curveLength]);
         
-        context.stroke();
-        
-        
-        
-        
-        // for (let i = 0; i < curve.length - 1; i++) {
-        //     canvas.drawLine({
-        //         x1: curve[i].x,
-        //         y1: curve[i].y,
-        //         x2: curve[i + 1].x,
-        //         y2: curve[i + 1].y,
-        //         strokeStyle: 'black',
-        //         lineWidth: 1,
-
-        //     });
-        // }
+        context.stroke();      
+                           
     }
 
     // возвращаем  точку(узел) по ее координате

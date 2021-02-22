@@ -45,7 +45,7 @@ class Application {
             }   
 
         const diff = timestamp - this.pTimestamp;
-        const secondPart = 1000 / diff;
+        const secondPart =  diff / 1000;
         const fps = 1000 / diff;
        
         
@@ -63,11 +63,12 @@ class Application {
         this.canvas.clear();
         // метод для рисования сетки
         this.canvas.drawGrid({
-            offsetX: this.camera.offsetX,
-            offsetY: this.camera.offsetY,
+            // гарантируем, что (0, 0) не дальше размера ячейки
+            offsetX: this.camera.offsetX % (75 * this.camera.scale),
+            offsetY: this.camera.offsetY % (75 * this.camera.scale),
             cellSize: 75 * this.camera.scale,
             lineWidth: 0.5,
-            strokeStyle: "black",
+            strokeStyle: "green",
         });
 
         

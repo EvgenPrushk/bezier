@@ -28,3 +28,18 @@ function memorize(func) {
 function getDist(x1, y1, x2, y2) {
     return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5;
 }
+
+function getcurveLength (points) {
+    let sum = 0;
+
+    for (let i = 0; i < points.length - 1; i++) {
+        //складываем сумма растояний между всеми точками
+        sum += getDist(
+            points[i].x, 
+            points[i].y, 
+            points[i + 1].x, 
+            points[i + 1].y,);        
+    }
+
+    return sum;
+}

@@ -58,6 +58,30 @@ class Canvas {
         }
     }
 
+    drawGrid(param) {
+        this.context.strokeStyle = param.strokeStyle;
+        this.context.lineWidth = param.lineWidth;
+        // рисуем горизонтальные линии
+    for (let i = 0; i < this.el.width / param.cellSize; i++) {
+        this.context.beginPath();
+        this.context.moveTo(param.offsetX + i * param.cellSize, 0)        
+        
+        this.context.lineTo(param.offsetX + i * param.cellSize, this.el.height);
+        this.context.stroke();
+    }       
+    // рисуем вертикальные линии линии
+    for (let i = 0; i < this.el.height / param.cellSize; i++) {
+        this.context.beginPath();
+        this.context.moveTo(0, param.offsetY + i * param.cellSize)        
+        
+        this.context.lineTo(this.el.width, param.offsetY + i * param.cellSize);
+        this.context.stroke();
+    }       
+
+}  
+        
+    
+
     save() {
         this.context.save();
     }

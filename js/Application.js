@@ -26,17 +26,23 @@ class Application {
     tick (timestamp) {
         requestAnimationFrame((x) => this.tick(x));   
         // если у нас было смещение мыши
-        if (this.mouse.delta) {
-            // делаем так, что точко под мышкой сохранилась относительно обсолютного нуля
-            const offsetX = this.camera.offsetX;
-            const offsetY = this.camera.offsetY;
+       
+        // делаем так, что точко под мышкой сохранилась относительно обсолютного нуля
+        // проверка находиться ли мышка над canvas
+            if (this.mouse.over && this.mouse.delta) {  
+                // находим положение мыши относительно обсолютных координат
+                const x = (app.mouse.x - app.camera.offsetX) / app.camera.scale;
+                const y = (app.mouse.y - app.camera.offsetY) / app.camera.scale;
 
-            this.camera.scale += this.mouse.delta * this.camera.scaleStep;
-
-            this.camera.offsetX -= offsetX * this.camera.scale;
-            this.camera.offsetY -= offsetY * this.camera.scale;
-            
-        }     
+                this.camera.scale += this.mouse.delta * this.camera.scaleStep;         
+                    
+                // вытаскиваем обратно offset
+                app.camera.offsetX = - x * app.camera.scale + app.mouse.x;
+                app.camera.offsetY = - y * app.camera.scale + app.mouse.y; 
+            }  
+            else {
+                this.camera.scale += this.mouse.delta * this.camera.scaleStep; 
+            }   
 
         const diff = timestamp - this.pTimestamp;
         const secondPart = 1000 / diff;
@@ -54,14 +60,19 @@ class Application {
                 fps,               
             });
         }
-
         this.canvas.clear();
+        // метод для рисования сетки
+        this.canvas.drawGrid({
+            offsetX: this.camera.offsetX,
+            offsetY: this.camera.offsetY,
+            cellSize: 75 * this.camera.scale,
+            lineWidth: 0.5,
+            strokeStyle: "black",
+        });
 
+        
         this.canvas.save();
-        this.canvas.translate(
-            this.camera.offsetX,
-            this.camera.offsetY,
-        );
+        this.canvas.translate(this.camera.offsetX, this.camera.offsetY);
 
         this.canvas.scale(this.camera.scale);
         

@@ -10,7 +10,7 @@ const bezier = new Bezier({
   step: 0.01,
   // showCtrlLines: false,
   nodes: [new Point(100, 100), new Point(400, 200), new Point(100, 400)],
-  colors: ["black", "red", "green", "blue", "pink"],
+  colors: ["green", "blue", "pink"],
   animation: true,
 });
 

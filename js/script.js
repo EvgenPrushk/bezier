@@ -11,7 +11,7 @@ const bezier = new Bezier({
   // showCtrlLines: false,
   nodes: [new Point(100, 100), new Point(400, 200), new Point(100, 400)],
   colors: ["green", "blue", "pink"],
-  animation: true,
+  animation: false,
 });
 
 // контейнер который создает экземпляр класса Bezier
@@ -39,4 +39,39 @@ app.tickHandlers.push(() => {
     pointUnderMouse.x = (app.mouse.x - app.camera.offsetX) / app.camera.scale;
     pointUnderMouse.y = (app.mouse.y - app.camera.offsetY) / app.camera.scale;
   }
+});
+
+// app.tickHandlers.push(() => {
+//   const modal = document.querySelector("#modal");
+
+//   const table = document.createElement("table");
+
+//   for (const node of bezier.nodes) {
+//     const tr = document.createElement("tr");
+//     table.append(tr);
+//     tr.innerHTML = `
+//       <td>${node.x}</td>
+//       <td>${node.y}</td>
+//     `;
+//   }
+
+//   modal.innerHTML = " ";
+//   modal.append(table);
+// });
+
+app.tickHandlers.push(() => {
+  const modal = document.querySelector("#modal");
+
+  const table = document.createElement("table");
+
+  for (const node of bezier.nodes) {
+    const tr = document.createElement("tr");
+    table.append(tr);
+    tr.innerHTML = `
+    <td>${node.x}</td>
+    <td>${node.y}</td>
+    `;
+  }
+  modal.innerHTML = "";
+  modal.append(table);
 });

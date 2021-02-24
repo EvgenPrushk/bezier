@@ -74,6 +74,39 @@ class Bezier {
     return result;
   }
 
+  // static getCurve(originalNodes, step) {
+  //   // результирующий массив
+  //   const rezult = [];
+
+  //   for (let part = 0; part <= 1; Math.min(1, part + step)) {
+  //     let nodes = originalNodes;
+
+  //     while (nodes.length > 1) {
+  //       const newNodes = [];
+
+  //       for (let i = 0; i < nodes.length - 1; i++) {
+  //         // положим точку
+  //         newNodes.push(
+  //           getPointBetween(
+  //             nodes[i].x,
+  //             nodes[i].y,
+  //             nodes[i + 1].x,
+  //             nodes[i + 1].y,
+  //             part,
+  //           )
+  //         );
+  //       }
+  //       nodes = newNodes;
+  //     }
+  //     rezult.push(nodes[0]);
+  //     if (part === 1) {
+  //       break;
+  //     }
+  //   }
+
+  //   return rezult;
+  // }
+
   tick({ secondPart }) {
     if (this.#newState) {
       this.#curve = Bezier.getCurve(this.nodes, this.step);
@@ -120,7 +153,13 @@ class Bezier {
     // }
     // если флаг поднят, то пересчитываем curve
 
-    const curveLength = getcurveLength(this.#curve);
+    const curveLength = getcurveLength(
+      this.#curve.slice(0, this.#curve.length)
+    );
+    const curveLengthPart = getcurveLength(
+      this.#curve.slice(0, this.part * this.#curve.length)
+    );
+
     const { context } = canvas;
     // рисуем точки первого уровня
     let nodes = this.nodes;
@@ -148,26 +187,29 @@ class Bezier {
             lineWidth: 1.5,
           });
         }
-      }
-      const newNodes = [];
 
-      for (let i = 0; i < nodes.length - 1; i++) {
-        // положим точку
-        newNodes.push(
-          getPointBetween(
-            nodes[i].x,
-            nodes[i].y,
-            nodes[i + 1].x,
-            nodes[i + 1].y,
-            this.part
-          )
-        );
+        const newNodes = [];
+
+        for (let i = 0; i < nodes.length - 1; i++) {
+          // положим точку
+          newNodes.push(
+            getPointBetween(
+              nodes[i].x,
+              nodes[i].y,
+              nodes[i + 1].x,
+              nodes[i + 1].y,
+              this.part
+            )
+          );
+        }
+        nodes = newNodes;
       }
-      nodes = newNodes;
+      if (!this.animation) {
+        break;
+      }
     }
 
     // рисование вспомогательной линии
-
     context.beginPath();
     context.moveTo(this.#curve[0].x, this.#curve[0].y);
 
@@ -177,7 +219,7 @@ class Bezier {
     context.strokeStyle = "black";
     context.lineWidth = 2;
     if (this.animation) {
-      context.setLineDash([curveLength * this.part, curveLength]);
+      context.setLineDash([curveLengthPart, curveLength]);
     } else {
       context.setLineDash([]);
     }

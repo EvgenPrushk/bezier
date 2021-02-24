@@ -3,3 +3,18 @@ body {
     padding: 0;
     overflow: hidden;
 }
+
+#modal {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    width: 200px;
+    height: 200px;
+    background-color: red;
+}
+
+
+#modal table td{
+    border: 1px solid gray;
+    padding: 10px;
+}

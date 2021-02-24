@@ -165,8 +165,7 @@ class Bezier {
     let nodes = this.nodes;
     for (let i = 0; i < this.nodes.length; i++) {
       //задаем цвет из массива
-      const color = this.colors[i % this.colors.length];
-      console.log(color);
+      const color = this.colors[i % this.colors.length];      
       for (const node of nodes) {
         canvas.drawCircle({
           x: node.x,

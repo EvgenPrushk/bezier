@@ -9,9 +9,9 @@ const app = new Application({
 const bezier = new Bezier({
   step: 0.01,
   // showCtrlLines: false,
-  nodes: [new Point(100, 100), new Point(400, 200), new Point(100, 400)],
+  nodes: [new Point(50, 100), new Point(150, 150), new Point(250, 300), new Point(400, 250)],
   colors: ["green", "blue", "pink"],
-  animation: false,
+  animation:true,
 });
 
 // контейнер который создает экземпляр класса Bezier
@@ -50,28 +50,10 @@ app.tickHandlers.push(() => {
 //     const tr = document.createElement("tr");
 //     table.append(tr);
 //     tr.innerHTML = `
-//       <td>${node.x}</td>
-//       <td>${node.y}</td>
+//     <td>${node.x}</td>
+//     <td>${node.y}</td>
 //     `;
 //   }
-
-//   modal.innerHTML = " ";
+//   modal.innerHTML = "";
 //   modal.append(table);
 // });
-
-app.tickHandlers.push(() => {
-  const modal = document.querySelector("#modal");
-
-  const table = document.createElement("table");
-
-  for (const node of bezier.nodes) {
-    const tr = document.createElement("tr");
-    table.append(tr);
-    tr.innerHTML = `
-    <td>${node.x}</td>
-    <td>${node.y}</td>
-    `;
-  }
-  modal.innerHTML = "";
-  modal.append(table);
-});

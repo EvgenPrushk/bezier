@@ -110,6 +110,7 @@ class Bezier {
   tick({ secondPart }) {
     if (this.#newState) {
       this.#curve = Bezier.getCurve(this.nodes, this.step);
+    
     }
 
     if (this.animation) {
@@ -124,6 +125,8 @@ class Bezier {
           this.speed *= -1;
         }
       }
+    } else {
+      this.part = 1;
     }
   }
 

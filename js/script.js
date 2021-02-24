@@ -9,13 +9,19 @@ const app = new Application({
 const bezier = new Bezier({
   step: 0.01,
   // showCtrlLines: false,
-  nodes: [new Point(50, 100), new Point(150, 150), new Point(250, 300), new Point(400, 250)],
+  nodes: [
+    new Point(50, 100),
+    new Point(150, 150),
+    new Point(250, 300),
+    new Point(400, 250),
+  ],
   colors: ["green", "blue", "pink"],
-  animation:true,
+  animation: true,
 });
 
 // контейнер который создает экземпляр класса Bezier
 app.container.push(bezier);
+guiInit();
 
 let pointUnderMouse = null;
 app.tickHandlers.push(() => {
@@ -57,3 +63,23 @@ app.tickHandlers.push(() => {
 //   modal.innerHTML = "";
 //   modal.append(table);
 // });
+
+function guiInit() {
+  const gui = new dat.GUI();
+
+  const controller = gui.addFolder("Controller");
+  controller.add(bezier, "animation").listen();
+  controller.open();
+
+  const cameraFolder = gui.addFolder("Camera");
+  cameraFolder.add(app.camera, "offsetX").listen();
+  cameraFolder.add(app.camera, "offsetY").listen();
+  cameraFolder.open();
+
+  bezier.nodes.forEach((node, i) => {
+    const Folder = gui.addFolder(`Nodes ${i}`);
+    Folder.add(node, "x").listen();
+    Folder.add(node, "y").listen();
+    Folder.open();
+  });
+}

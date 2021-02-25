@@ -5,8 +5,8 @@ class Observer {
   }
   // сообщает, что объект изменился
   dispatch() {
-    for (const handler of handlers) {
-        handler();
+    for (const handler of this.handlers) {
+      handler();
     }
   }
   // возможность прослушивать

@@ -1,7 +1,9 @@
-class Bezier {
+class Bezier extends Observer {
   #curve;
   #newState = false;
+  #animation = false;
   constructor(params) {
+    super();
     this.nodes = [];
 
     this.#curve = [];
@@ -16,7 +18,7 @@ class Bezier {
 
     this.colors = params.colors ?? ["red"];
 
-    this.animation = params.animation ?? false;
+    this.#animation = params.animation ?? false;
     this.part = 1;
     this.speed = 1 / 2;
 
@@ -30,7 +32,10 @@ class Bezier {
       if (!this.nodes.includes(node)) {
         this.nodes.push(node);
         // прослушивание. При изменение координат подымаем  newState в true
-        node.subscribe(() => (this.#newState = true));
+        node.subscribe(() => {
+          this.#newState = true;
+          this.dispatch();
+        });
 
         this.#newState = true;
       }
@@ -42,6 +47,15 @@ class Bezier {
   get curve() {
     return JSON.parse(JSON.stringify(this.#curve));
   }
+  get animation() {
+    return this.#animation;
+  }
+  set animation(v) {
+    this.#animation = v;
+    this.dispatch();
+    return v;
+  }
+
   static getCurve(nodes, step) {
     const result = [];
     // - 1 береться, чтобы попасть в последнюю точку
@@ -110,7 +124,6 @@ class Bezier {
   tick({ secondPart }) {
     if (this.#newState) {
       this.#curve = Bezier.getCurve(this.nodes, this.step);
-    
     }
 
     if (this.animation) {
@@ -168,7 +181,7 @@ class Bezier {
     let nodes = this.nodes;
     for (let i = 0; i < this.nodes.length; i++) {
       //задаем цвет из массива
-      const color = this.colors[i % this.colors.length];      
+      const color = this.colors[i % this.colors.length];
       for (const node of nodes) {
         canvas.drawCircle({
           x: node.x,

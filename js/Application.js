@@ -1,5 +1,7 @@
-class Application {
+class Application extends Observer {
   constructor(params) {
+    super();
+
     this.canvas = new Canvas({
       el: "canvas",
       width: 500,
@@ -10,16 +12,33 @@ class Application {
     this.mouse = new Mouse(this.canvas.el);
     // сборщик информации о том маштабе и сдвеге в canvas
     this.camera = new Camera();
+    // подписываемся на изменение камеры
+    this.camera.subscribe(() => this.dispatch());
 
     this.pTimestamp = 0;
     // в э  том массиве будут храниться элементы, которые мы хотим отрисовывать
     this.container = [];
     this.tickHandlers = [];
+    this.firstTick = true;
+
     //изменяем размер экрана
     this.resize();
     window.addEventListener("resize", () => this.resize());
     // регистрирует вызов функции
     requestAnimationFrame((x) => this.tick(x));
+  }
+
+  add(...items) {
+    for (const item of items) {
+      if ( !this.container.includes(item)) {
+        this.container.push(item);
+        // пренадлежит ли Observer
+        if (item instanceof Observer) {
+          // вызываем метод dispatch()
+          item.subscribe(() => this.dispatch());
+        }
+      }
+    }
   }
   // метод, который обнавляет наш экран( очистка, проход по всему контейнеру и отрисовка)
   // timestamp - время жизни страницы
@@ -35,6 +54,7 @@ class Application {
       const y = (app.mouse.y - app.camera.offsetY) / app.camera.scale;
 
       this.camera.scale += this.mouse.delta * this.camera.scaleStep;
+      this.camera.scale = Math.max(0.4, this.camera.scale);
 
       // вытаскиваем обратно offset
       app.camera.offsetX = -x * app.camera.scale + app.mouse.x;

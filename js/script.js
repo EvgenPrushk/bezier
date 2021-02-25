@@ -1,8 +1,6 @@
 // конкатинирует возможности canvas и обеспечивает базовую анимацию
 const app = new Application({
   el: "canvas",
-  width: 500,
-  height: 500,
   background: "#d2d2d2",
 });
 
@@ -19,8 +17,40 @@ const bezier = new Bezier({
   animation: true,
 });
 
+// если в localStorage  имеется предыдущее состояние, то
+// то мы ее достаем и распарсим
+if (localStorage.getItem("__bezier__")) {
+  const params = JSON.parse(localStorage.getItem("__bezier__"));
+  if (params.camera) {
+    Object.assign(app.camera, params.camera);
+  }
+
+  if (params.nodes) {
+    //удаляем все точкии
+    bezier.nodes = [];
+    bezier.add(...params.nodes.map((node) => new Point(node.x, node.y)));
+  }
+  if (params.hasOwnProperty("animation")) {
+    bezier.animation = params.animation;
+  }
+}
+// каждый раз, когда у нас изменяется событие
+app.subscribe(() => {
+  const params = {
+    animation: bezier.animation,
+    camera: {
+      offsetX: app.camera.offsetX,
+      offsetY: app.camera.offsetY,
+      scale: app.camera.scale,
+    },
+    // запоминаем x and y  каждой точки
+    nodes: bezier.nodes.map((node) => ({ x: node.x, y: node.y })),
+  };
+  localStorage.setItem("__bezier__", JSON.stringify(params));
+});
+
 // контейнер который создает экземпляр класса Bezier
-app.container.push(bezier);
+app.add(bezier);
 guiInit();
 
 let pointUnderMouse = null;
@@ -33,8 +63,8 @@ app.tickHandlers.push(() => {
   }
   // если мы точку не нашли
   if (!pointUnderMouse && app.mouse.left) {
-    app.camera.offsetX += app.mouse.dx;
-    app.camera.offsetY += app.mouse.dy;
+    app.camera.offsetX += app.mouse.dX;
+    app.camera.offsetY += app.mouse.dY;
   }
   // если мышка не над canvas или мы отпустили клавишу
   if (!app.mouse.left) {
